@@ -3,6 +3,7 @@
   "productName": "StreamMirror",
   "version": "0.1.0",
   "private": true,
+  "license": "GPL-3.0-or-later",
   "description": "Mirror layar + suara HP Android dan iOS ke PC (kabel / wireless), audio game terpisah dari mic.",
   "main": "./out/main/index.js",
   "scripts": {

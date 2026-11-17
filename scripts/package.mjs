@@ -33,4 +33,8 @@ const [appPath] = await packager({
     .filter((item) => !skipped.includes(item))
     .map((item) => path.join(ROOT, item)),
 });
+// Lisensi aplikasi + daftar komponen pihak ketiga ikut di bundel. Nama berbeda karena
+// `LICENSE` di root bundel sudah dipakai lisensi Electron.
+fs.copyFileSync(path.join(ROOT, 'LICENSE'), path.join(appPath, 'LICENSE.StreamMirror.txt'));
+fs.copyFileSync(path.join(ROOT, 'NOTICE.md'), path.join(appPath, 'NOTICE.md'));
 console.log(`Paket siap: ${appPath}`);

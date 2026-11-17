@@ -49,9 +49,13 @@ Windows 10/11 x64 only. Mirroring is view-only: the phone cannot be controlled f
 - Android: USB debugging enabled. Audio needs Android 11 or newer.
 - iPhone / iPad: Apple's Bonjour and USB support, which come with **Apple Devices** (Microsoft Store) or iTunes
 
-## Build from source
+## Download
 
-There are no prebuilt releases yet.
+Get the portable Windows build from [Releases](https://github.com/Xaneqt/StreamMirror/releases): download `StreamMirror-<version>-win64.zip`, extract the whole folder, and run `StreamMirror.exe`. Nothing is installed. The build is not code-signed, so Windows SmartScreen may warn the first time; choose **More info → Run anyway**.
+
+The download already contains `adb`, the scrcpy server, the AirPlay receiver, and the iPhone USB helper.
+
+## Build from source
 
 ```bash
 git clone https://github.com/Xaneqt/StreamMirror.git
@@ -142,9 +146,9 @@ The **Output** list chooses which Windows device plays the phone audio. Leave **
 
 ## License
 
-No license has been chosen for the StreamMirror application code yet. Until one is added, the code is published for reading only and normal copyright applies.
+StreamMirror is free software, licensed under the [GNU General Public License v3.0 or later](LICENSE) (`GPL-3.0-or-later`).
 
-Third-party code keeps its own license: the files in `native/` are GPL-3.0-or-later, and parts of two build scripts are ported from an Apache-2.0 project. See [NOTICE.md](NOTICE.md) and the texts in [LICENSES/](LICENSES).
+Third-party components keep their own licenses; parts of two build scripts are ported from an Apache-2.0 project. See [NOTICE.md](NOTICE.md) and the texts in [LICENSES/](LICENSES). The release package also includes the corresponding source of its bundled GPL programs under `resources/airplay/source/` and `resources/usb/source/`.
 
 ## Acknowledgements
 
