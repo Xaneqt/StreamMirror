@@ -51,6 +51,9 @@ if (!fs.existsSync(bash)) {
   }
 }
 
+// Keyring pacman biasanya dibuat saat login pertama, tapi tidak selalu (mis. di runner GitHub Actions).
+// Membuatnya eksplisit aman diulang: --init tidak menimpa keyring yang sudah ada.
+msysBash('pacman-key --init && pacman-key --populate msys2');
 // Update pertama memperbarui runtime MSYS2 dan menutup shell-nya sendiri; exit code diabaikan.
 msysBash('pacman -Syu --noconfirm', { ignoreExit: true });
 msysBash(`pacman -Syu --noconfirm && pacman -S --needed --noconfirm ${PACKAGES.join(' ')}`);
