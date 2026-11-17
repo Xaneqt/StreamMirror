@@ -133,6 +133,21 @@ The **Output** list chooses which Windows device plays the phone audio. Leave **
 2. Add a **Window Capture** source and select that window.
 3. For audio, add an **Application Audio Capture** source for the same window, or route StreamMirror's output to a device OBS already captures.
 
+## Uninstall
+
+StreamMirror is portable, so removing it is manual:
+
+1. If you set up iPhone USB capture, click **Lepas driver USB** for that iPhone first. This removes the libusb0 filter driver.
+2. If you added the AirPlay firewall rule, remove it from an elevated PowerShell: `Remove-NetFirewallRule -DisplayName "StreamMirror AirPlay"`.
+3. Delete the extracted `StreamMirror-win32-x64` folder.
+4. Delete the settings folder `%APPDATA%\StreamMirror`.
+
+## Privacy
+
+This program will not transfer any information to other networked systems unless specifically requested by the user or the person installing or operating it.
+
+StreamMirror talks only to the phone you connect: over USB, over `adb` on your local network, or by accepting AirPlay connections on your local network while it is running. It does not download anything at runtime and has no telemetry.
+
 ## Project layout
 
 | Path | Contents |
@@ -143,6 +158,15 @@ The **Output** list chooses which Windows device plays the phone audio. Leave **
 | `scripts/` | Download, native build, and packaging scripts |
 | `native/` | Sources for the native helpers (GPL-3.0-or-later, from Mirrorlab) |
 | `assets/` | Logo and banner |
+
+## Code signing policy
+
+Free code signing provided by [SignPath.io](https://about.signpath.io), certificate by [SignPath Foundation](https://signpath.org).
+
+- Committers and reviewers: [Xaneqt](https://github.com/Xaneqt)
+- Approvers: [Xaneqt](https://github.com/Xaneqt)
+
+Release builds are produced by the [Release workflow](.github/workflows/release.yml) on GitHub-hosted runners, and every signing request is approved manually. Only `StreamMirror.exe` is signed; the bundled third-party programs (`adb.exe`, `uxplay.exe`, `iphone-usb.exe`) are included unsigned. See [Privacy](#privacy) for what the program sends over the network.
 
 ## License
 

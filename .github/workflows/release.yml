@@ -1,0 +1,128 @@
+# Build paket portable Windows di runner GitHub, tandatangani StreamMirror.exe lewat SignPath
+# (bila sudah dikonfigurasi), lalu unggah ke GitHub Release.
+#
+# - Push tag `v<versi>` (harus sama dengan "version" di package.json) → build + release.
+# - Jalankan manual (Actions → Release → Run workflow) → build saja, hasil sebagai artefak workflow.
+#
+# Penandatanganan aktif bila repository variable SIGNPATH_ORGANIZATION_ID terisi dan secret
+# SIGNPATH_API_TOKEN ada. Tanpa itu paket tetap dibuat, tanpa tanda tangan.
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+
+permissions:
+  actions: read
+  contents: write
+
+env:
+  MH_WORK: D:\mh-work
+
+jobs:
+  build:
+    runs-on: windows-latest
+    timeout-minutes: 120
+    defaults:
+      run:
+        shell: pwsh
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Versi
+        id: version
+        run: |
+          $version = (Get-Content package.json -Raw | ConvertFrom-Json).version
+          if ($env:GITHUB_REF_TYPE -eq 'tag' -and $env:GITHUB_REF_NAME -ne "v$version") {
+            throw "Tag $env:GITHUB_REF_NAME tidak sama dengan versi package.json ($version)"
+          }
+          "version=$version" >> $env:GITHUB_OUTPUT
+
+      - name: Install
+        run: npm ci
+
+      - name: Typecheck dan test
+        run: |
+          npm run typecheck
+          npm test
+
+      - name: Runtime Android (scrcpy-server, adb)
+        run: npm run fetch:android
+
+      - name: Penerima AirPlay (UxPlay)
+        run: npm run build:airplay
+
+      - name: Helper iPhone USB
+        run: npm run build:usb
+
+      - name: Paket portable
+        run: npm run package
+
+      - name: Unggah paket belum ditandatangani
+        id: unsigned
+        uses: actions/upload-artifact@v7
+        with:
+          name: StreamMirror-${{ steps.version.outputs.version }}-unsigned
+          path: dist/StreamMirror-win32-x64
+          if-no-files-found: error
+
+      - name: Tandatangani lewat SignPath
+        if: ${{ vars.SIGNPATH_ORGANIZATION_ID != '' }}
+        uses: signpath/github-action-submit-signing-request@v3
+        with:
+          api-token: ${{ secrets.SIGNPATH_API_TOKEN }}
+          organization-id: ${{ vars.SIGNPATH_ORGANIZATION_ID }}
+          project-slug: ${{ vars.SIGNPATH_PROJECT_SLUG || 'StreamMirror' }}
+          signing-policy-slug: ${{ vars.SIGNPATH_SIGNING_POLICY_SLUG || 'release-signing' }}
+          github-artifact-id: ${{ steps.unsigned.outputs.artifact-id }}
+          wait-for-completion: true
+          # Setiap rilis harus di-approve manual di SignPath; beri waktu 1 jam.
+          wait-for-completion-timeout-in-seconds: 3600
+          output-artifact-directory: dist/signed/StreamMirror-win32-x64
+          parameters: |
+            version: ${{ toJSON(steps.version.outputs.version) }}
+
+      - name: Zip
+        id: zip
+        run: |
+          $source = if (Test-Path dist/signed/StreamMirror-win32-x64/StreamMirror.exe) { 'dist/signed' } else { 'dist' }
+          $signature = (Get-AuthenticodeSignature "$source/StreamMirror-win32-x64/StreamMirror.exe").Status
+          Write-Host "StreamMirror.exe signature: $signature"
+          $zip = "StreamMirror-${{ steps.version.outputs.version }}-win64.zip"
+          Push-Location $source
+          7z a -tzip -mx=7 "$env:GITHUB_WORKSPACE/dist/$zip" StreamMirror-win32-x64 | Out-Null
+          Pop-Location
+          $hash = (Get-FileHash "dist/$zip" -Algorithm SHA256).Hash.ToLower()
+          "zip=dist/$zip" >> $env:GITHUB_OUTPUT
+          "sha256=$hash" >> $env:GITHUB_OUTPUT
+          "signed=$($signature -eq 'Valid')" >> $env:GITHUB_OUTPUT
+
+      - name: Unggah zip sebagai artefak workflow
+        if: ${{ github.ref_type != 'tag' }}
+        uses: actions/upload-artifact@v7
+        with:
+          path: ${{ steps.zip.outputs.zip }}
+          archive: false
+
+      - name: GitHub Release
+        if: ${{ github.ref_type == 'tag' }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $signed = if ('${{ steps.zip.outputs.signed }}' -eq 'True') { 'Signed' } else { 'Not signed' }
+          $notes = @"
+          Portable build for Windows 10/11 x64. Extract the whole folder and run ``StreamMirror.exe``. Nothing is installed.
+
+          - Code signature: $signed
+          - SHA-256: ``${{ steps.zip.outputs.sha256 }}``
+          - Built by GitHub Actions from this tag ([workflow run]($env:GITHUB_SERVER_URL/$env:GITHUB_REPOSITORY/actions/runs/$env:GITHUB_RUN_ID)).
+
+          See the [README](https://github.com/$env:GITHUB_REPOSITORY#readme) for usage and the [code signing policy](https://github.com/$env:GITHUB_REPOSITORY#code-signing-policy).
+          "@
+          gh release create $env:GITHUB_REF_NAME '${{ steps.zip.outputs.zip }}' --title "StreamMirror ${{ steps.version.outputs.version }}" --notes $notes

@@ -18,9 +18,16 @@ if (!fs.existsSync(path.join(ROOT, 'out/main/index.js'))) {
 const skipped = optional.filter((item) => !fs.existsSync(path.join(ROOT, item)));
 if (skipped.length > 0) console.warn(`Tidak dibundel (belum dibuild): ${skipped.join(', ')}`);
 
+const { version } = JSON.parse(fs.readFileSync(path.join(ROOT, 'package.json'), 'utf8'));
+
 const [appPath] = await packager({
   dir: ROOT,
   name: 'StreamMirror',
+  // Metadata PE StreamMirror.exe; SignPath mewajibkan product name + version konsisten.
+  appVersion: version,
+  buildVersion: version,
+  appCopyright: 'Copyright (C) 2026 StreamMirror contributors',
+  win32metadata: { CompanyName: 'StreamMirror contributors', ProductName: 'StreamMirror', FileDescription: 'StreamMirror' },
   icon: path.join(ROOT, 'assets/icon.ico'),
   platform: 'win32',
   arch: 'x64',
@@ -28,7 +35,7 @@ const [appPath] = await packager({
   overwrite: true,
   asar: true,
   prune: true,
-  ignore: [/^\/(src|test|scripts|native|resources|dist|assets|\.omp)($|\/)/],
+  ignore: [/^\/(src|test|scripts|native|resources|dist|assets|LICENSES|\.github|\.signpath|\.omp)($|\/)/],
   extraResource: [...required, ...optional]
     .filter((item) => !skipped.includes(item))
     .map((item) => path.join(ROOT, item)),

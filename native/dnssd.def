@@ -1,0 +1,33 @@
+; Daftar export dnssd.dll (Bonjour for Windows). Hanya dipakai dlltool untuk membuat
+; dnssd.lib yang diminta CMake UxPlay; saat jalan UxPlay memuat dnssd.dll milik
+; Bonjour Service lewat LoadLibrary, jadi Bonjour tidak perlu ada saat build.
+LIBRARY "dnssd.dll"
+EXPORTS
+DNSServiceAddRecord
+DNSServiceBrowse
+DNSServiceConstructFullName
+DNSServiceCreateConnection
+DNSServiceEnumerateDomains
+DNSServiceGetAddrInfo
+DNSServiceGetProperty
+DNSServiceNATPortMappingCreate
+DNSServiceProcessResult
+DNSServiceQueryRecord
+DNSServiceReconfirmRecord
+DNSServiceRefDeallocate
+DNSServiceRefSockFD
+DNSServiceRegister
+DNSServiceRegisterRecord
+DNSServiceRemoveRecord
+DNSServiceResolve
+DNSServiceUpdateRecord
+TXTRecordContainsKey
+TXTRecordCreate
+TXTRecordDeallocate
+TXTRecordGetBytesPtr
+TXTRecordGetCount
+TXTRecordGetItemAtIndex
+TXTRecordGetLength
+TXTRecordGetValuePtr
+TXTRecordRemoveValue
+TXTRecordSetValue

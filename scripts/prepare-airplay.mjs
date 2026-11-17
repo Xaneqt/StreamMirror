@@ -83,16 +83,13 @@ if (changed.join('\n') !== patchedFiles.join('\n')) {
   throw new Error(`git diff UxPlay harus tepat ${patchedFiles.join(', ')}; didapat: ${changed.join(', ') || '(kosong)'}`);
 }
 
-// dnssd.dll milik Bonjour Service hanya dipakai untuk membuat import library; runtime memakai salinan di System32.
-for (const d of ['Bin/x64', 'Lib/x64', 'Include']) fs.mkdirSync(`${sdk}/${d}`, { recursive: true });
-const systemDnssd = path.join(process.env.SystemRoot ?? 'C:\\Windows', 'System32', 'dnssd.dll');
-if (!fs.existsSync(systemDnssd)) throw new Error(`${systemDnssd} tidak ada: pasang Bonjour (Apple Devices / iTunes) dulu`);
-fs.copyFileSync(systemDnssd, `${sdk}/Bin/x64/dnssd.dll`);
+// dnssd.lib hanya untuk memenuhi CMake UxPlay; dibuat dari native/dnssd.def sehingga build tidak
+// butuh Bonjour terpasang (mis. di GitHub Actions). Saat jalan dnssd.dll dimuat dari Bonjour Service.
+for (const d of ['Lib/x64', 'Include']) fs.mkdirSync(`${sdk}/${d}`, { recursive: true });
 // Header ikut dibundel bersama source native supaya rebuild offline tetap bisa.
 await download('https://raw.githubusercontent.com/apple-oss-distributions/mDNSResponder/main/mDNSShared/dns_sd.h', `${sdk}/Include/dns_sd.h`);
 const env = { ...process.env, MSYSTEM: 'UCRT64', CHERE_INVOKING: '1', BONJOUR_SDK_HOME: sdk };
-run(`${bin}/gendef.exe`, [`${sdk}/Bin/x64/dnssd.dll`], { cwd: `${sdk}/Lib/x64`, env });
-run(`${bin}/dlltool.exe`, ['-d', 'dnssd.def', '-l', 'dnssd.lib'], { cwd: `${sdk}/Lib/x64`, env });
+run(`${bin}/dlltool.exe`, ['-d', `${ROOT}/native/dnssd.def`, '-l', 'dnssd.lib'], { cwd: `${sdk}/Lib/x64`, env });
 msysBash(`cmake -S ${source} -B ${build} -G Ninja -DNO_MARCH_NATIVE=ON -DCMAKE_BUILD_TYPE=Release && cmake --build ${build} -j 8`, {
   env: { BONJOUR_SDK_HOME: sdk },
 });
