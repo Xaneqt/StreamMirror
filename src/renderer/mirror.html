@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; style-src 'self' 'unsafe-inline'; connect-src 'self' ws://localhost:*"
+    />
+    <title>Mirror</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background: #000;
+      }
+      #screen {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        background: #000;
+      }
+      #toast {
+        position: fixed;
+        left: 50%;
+        bottom: 24px;
+        transform: translateX(-50%);
+        max-width: 80%;
+        padding: 8px 14px;
+        border-radius: 6px;
+        background: rgba(20, 20, 20, 0.88);
+        color: #f2f2f2;
+        font: 14px/1.4 'Segoe UI', system-ui, sans-serif;
+        text-align: center;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.2s;
+      }
+      #toast.show {
+        opacity: 1;
+      }
+      #closed {
+        position: fixed;
+        inset: 0;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+        background: rgba(0, 0, 0, 0.75);
+        color: #f2f2f2;
+        font: 16px/1.5 'Segoe UI', system-ui, sans-serif;
+        text-align: center;
+      }
+      #closed.show {
+        display: flex;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="screen"></canvas>
+    <div id="toast"></div>
+    <div id="closed"></div>
+    <script type="module" src="./src/mirror.ts"></script>
+  </body>
+</html>

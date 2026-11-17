@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; style-src 'self' 'unsafe-inline'; connect-src 'self' ws://localhost:*"
+    />
+    <title>StreamMirror</title>
+    <link rel="stylesheet" href="./src/style.css" />
+  </head>
+  <body>
+    <main>
+      <header class="topbar">
+        <h1 class="brand">
+          <picture>
+            <source id="brand-banner-dark" media="(prefers-color-scheme: dark)" />
+            <img id="brand-banner" alt="StreamMirror" />
+          </picture>
+        </h1>
+        <label class="theme-field">
+          Tema
+          <select id="theme">
+            <option value="dark">Gelap</option>
+            <option value="light">Terang</option>
+          </select>
+        </label>
+      </header>
+
+      <section class="block">
+        <h2>Android</h2>
+        <div id="android-list" class="list"></div>
+        <form id="pair-form" class="inline-form">
+          <input id="pair-address" type="text" placeholder="IP:port" autocomplete="off" spellcheck="false" />
+          <input
+            id="pair-code"
+            type="text"
+            placeholder="kode 6 digit"
+            inputmode="numeric"
+            maxlength="6"
+            autocomplete="off"
+          />
+          <button id="pair-button" type="submit">Pair</button>
+        </form>
+        <form id="connect-form" class="inline-form">
+          <input id="connect-address" type="text" placeholder="IP:port" autocomplete="off" spellcheck="false" />
+          <button id="connect-button" type="submit">Connect</button>
+        </form>
+        <p id="android-result" class="result"></p>
+      </section>
+
+      <section class="block">
+        <h2>iPhone / iPad</h2>
+        <div class="row">
+          <div class="row-main">
+            <span class="name">AirPlay</span>
+            <span id="airplay-state" class="badge"></span>
+            <span id="airplay-message" class="muted"></span>
+          </div>
+          <div class="row-actions">
+            <button id="airplay-restart" type="button">Restart receiver</button>
+          </div>
+        </div>
+        <div id="ios-usb-list" class="list"></div>
+        <p id="ios-result" class="result"></p>
+      </section>
+
+      <section class="block">
+        <h2>Audio</h2>
+        <div class="field">
+          <label for="audio-output">Output</label>
+          <select id="audio-output"></select>
+        </div>
+        <div class="field">
+          <label for="audio-volume">Volume</label>
+          <input id="audio-volume" type="range" min="0" max="100" step="1" />
+          <span id="audio-volume-value" class="value"></span>
+        </div>
+        <label class="check"><input id="audio-muted" type="checkbox" /> Mute</label>
+        <label class="check">
+          <input id="keep-phone-audio" type="checkbox" /> Tetap bunyi di HP (Android 13+, berlaku saat Mirror berikutnya)
+        </label>
+      </section>
+
+      <section class="block">
+        <h2>Video (Android)</h2>
+        <div class="field">
+          <label for="video-max-size">Resolusi maks</label>
+          <select id="video-max-size"></select>
+        </div>
+        <div class="field">
+          <label for="video-bitrate">Bitrate (Mbps)</label>
+          <input id="video-bitrate" type="number" min="2" max="40" step="1" />
+        </div>
+        <div class="field">
+          <label for="video-max-fps">FPS maks</label>
+          <select id="video-max-fps"></select>
+        </div>
+        <p class="muted">berlaku saat Mirror berikutnya</p>
+      </section>
+
+      <section class="block">
+        <h2>Sesi aktif</h2>
+        <div id="session-list" class="list"></div>
+        <p id="session-result" class="result"></p>
+      </section>
+    </main>
+    <script type="module" src="./src/launcher.ts"></script>
+  </body>
+</html>

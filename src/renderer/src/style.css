@@ -1,0 +1,293 @@
+/*
+ * Tema mengikuti `prefers-color-scheme`, yang dikendalikan main process lewat
+ * `nativeTheme.themeSource` (pengaturan `theme`). Tiap warna: light-dark(terang, gelap).
+ */
+:root {
+  color-scheme: light dark;
+  --bg: light-dark(#f3f4f6, #0d1116);
+  --panel: light-dark(#ffffff, #1b1e23);
+  --panel-2: light-dark(#eef0f3, #23272e);
+  --border: light-dark(#d0d5dd, #2e333b);
+  --text: light-dark(#0f172a, #e6e8eb);
+  --muted: light-dark(#5b6472, #9aa1ab);
+  --accent: light-dark(#2563eb, #3d8bfd);
+  --accent-hover: light-dark(#1d4ed8, #5a9cff);
+  --good: light-dark(#1a7f37, #3fb950);
+  --warn: light-dark(#9a6700, #d29922);
+  --bad: light-dark(#cf222e, #f85149);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 14px/1.45 'Segoe UI', system-ui, sans-serif;
+}
+
+main {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 20px 20px 32px;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.brand {
+  margin: 0;
+}
+
+/* Banner 4:1 punya padding kiri 1/32 lebar; margin negatif meratakan ikon dengan tepi blok. */
+.brand img {
+  display: block;
+  height: 88px;
+  aspect-ratio: 4 / 1;
+  margin-left: -11px;
+}
+
+.theme-field {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 8px;
+  color: var(--muted);
+}
+
+h2 {
+  margin: 0 0 12px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.block {
+  margin-bottom: 14px;
+  padding: 14px 16px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 10px;
+  background: var(--panel-2);
+  border-radius: 6px;
+}
+
+.row + .list,
+.row + .row {
+  margin-top: 6px;
+}
+
+.row-main {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.row-actions {
+  display: flex;
+  flex-shrink: 0;
+  gap: 6px;
+}
+
+.name {
+  font-weight: 600;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+p.muted {
+  margin: 4px 0;
+}
+
+.hint {
+  color: var(--warn);
+}
+
+.badge {
+  padding: 1px 7px;
+  border-radius: 10px;
+  background: var(--border);
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.badge.good,
+.badge.airplay-ready {
+  background: color-mix(in srgb, var(--good) 18%, transparent);
+  color: var(--good);
+}
+
+.badge.warn,
+.badge.airplay-starting {
+  background: color-mix(in srgb, var(--warn) 18%, transparent);
+  color: var(--warn);
+}
+
+.badge.live,
+.badge.airplay-mirroring {
+  background: color-mix(in srgb, var(--accent) 20%, transparent);
+  color: var(--accent-hover);
+}
+
+.badge.airplay-error {
+  background: color-mix(in srgb, var(--bad) 18%, transparent);
+  color: var(--bad);
+}
+
+button {
+  padding: 5px 12px;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  background: var(--panel-2);
+  color: var(--text);
+  font: inherit;
+  cursor: pointer;
+}
+
+button:hover:not(:disabled) {
+  border-color: var(--muted);
+}
+
+button.primary,
+button[type='submit'] {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: #fff;
+}
+
+button.primary:hover:not(:disabled),
+button[type='submit']:hover:not(:disabled) {
+  background: var(--accent-hover);
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+input[type='text'],
+input[type='number'],
+select {
+  padding: 5px 8px;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  background: var(--bg);
+  color: var(--text);
+  font: inherit;
+}
+
+input:focus,
+select:focus,
+button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.inline-form {
+  display: flex;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.inline-form input[type='text'] {
+  width: 180px;
+}
+
+#pair-code {
+  width: 120px;
+}
+
+.field {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.field > label {
+  width: 120px;
+  color: var(--muted);
+}
+
+.field select {
+  min-width: 220px;
+  max-width: 100%;
+}
+
+#audio-output {
+  flex: 1;
+}
+
+#audio-volume {
+  width: 260px;
+  accent-color: var(--accent);
+}
+
+#video-bitrate {
+  width: 80px;
+}
+
+.value {
+  min-width: 40px;
+  color: var(--muted);
+}
+
+.check {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.check input {
+  accent-color: var(--accent);
+}
+
+.result {
+  margin: 8px 0 0;
+}
+
+.result:empty {
+  display: none;
+}
+
+.result.ok {
+  color: var(--good);
+}
+
+.result.error {
+  color: var(--bad);
+}
+
+/* Pesan status/hasil bisa multi-baris (mis. 5 baris log terakhir penerima AirPlay). */
+#airplay-message,
+.result {
+  white-space: pre-line;
+}

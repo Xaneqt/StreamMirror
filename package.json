@@ -1,0 +1,29 @@
+{
+  "name": "streammirror",
+  "productName": "StreamMirror",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Mirror layar + suara HP Android dan iOS ke PC (kabel / wireless), audio game terpisah dari mic.",
+  "main": "./out/main/index.js",
+  "scripts": {
+    "postinstall": "node node_modules/electron/install.js",
+    "dev": "electron-vite dev",
+    "build": "electron-vite build",
+    "start": "electron-vite preview",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "fetch:android": "node scripts/fetch-android.mjs",
+    "build:airplay": "node scripts/setup-msys.mjs && node scripts/prepare-airplay.mjs",
+    "build:usb": "node scripts/setup-msys.mjs && node scripts/build-usb.mjs",
+    "package": "npm run build && node scripts/package.mjs"
+  },
+  "devDependencies": {
+    "@electron/packager": "20.3.0",
+    "@types/node": "24.19.2",
+    "electron": "45.3.2",
+    "electron-vite": "6.0.0",
+    "typescript": "5.9.3",
+    "vite": "8.3.8",
+    "vitest": "5.1.0"
+  }
+}

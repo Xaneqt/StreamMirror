@@ -1,0 +1,11 @@
+node_modules/
+out/
+dist/
+resources/
+
+# File agen AI / editor lokal
+.claude/
+.omp/
+
+# Arsip sumber logo; isinya sudah ada di assets/
+streammirror-assets.zip

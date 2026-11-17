@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 320" width="1280" height="320">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#7C3AED"/><stop offset="1" stop-color="#2563EB"/>
+    </linearGradient>
+    <linearGradient id="bgU" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="512" y2="512">
+      <stop offset="0" stop-color="#7C3AED"/><stop offset="1" stop-color="#2563EB"/>
+    </linearGradient>
+    <linearGradient id="screen" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1E1B4B"/><stop offset="1" stop-color="#312E81"/>
+    </linearGradient>
+    <linearGradient id="text" gradientUnits="userSpaceOnUse" x1="680" y1="0" x2="1040" y2="0">
+      <stop offset="0" stop-color="#8B5CF6"/><stop offset="1" stop-color="#3B82F6"/>
+    </linearGradient>
+  </defs>
+  <g transform="translate(40 40) scale(0.46875)">
+    <rect width="512" height="512" rx="112" fill="url(#bg)"/>
+    <rect x="270" y="326" width="28" height="44" fill="#FFFFFF" fill-opacity="0.85"/>
+    <rect x="218" y="364" width="132" height="18" rx="9" fill="#FFFFFF" fill-opacity="0.85"/>
+    <rect x="128" y="118" width="312" height="214" rx="22" fill="#FFFFFF"/>
+    <rect x="144" y="134" width="280" height="182" rx="10" fill="url(#screen)"/>
+    <polygon points="268,197 268,253 314,225" fill="#FFFFFF"/>
+    <rect x="68" y="182" width="136" height="246" rx="26" fill="#FFFFFF" stroke="url(#bgU)" stroke-width="12"/>
+    <rect x="82" y="212" width="108" height="194" rx="12" fill="url(#screen)"/>
+    <rect x="116" y="194" width="40" height="7" rx="3.5" fill="#C4B5FD"/>
+    <polygon points="121,284 121,334 162,309" fill="#FFFFFF"/>
+    <circle cx="434" cy="124" r="30" fill="#EF4444" stroke="#FFFFFF" stroke-width="9"/>
+  </g>
+  <text x="320" y="182" font-family="Inter, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="112" font-weight="800" letter-spacing="-3"><tspan fill="#FFFFFF">Stream</tspan><tspan fill="url(#text)">Mirror</tspan></text>
+  <text x="326" y="240" font-family="Inter, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="32" font-weight="500" fill="#9CA3AF">Android &amp; iOS screen mirroring for game streaming</text>
+</svg>
